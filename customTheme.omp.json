@@ -1,14 +1,18 @@
 {
   "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
-  "version": 2,
-  "final_space": true,
   "palette": {
-        "os": "#000000",
-        "white": "#ffffff",
-        "darkGray": "#555555",
-        "battery": "#ffeb3b",
-        "path":  "#1478DB",
-        "clock":"#333333"
+    "battery": "#ffeb3b",
+    "clock": "#333333",
+    "darkGray": "#555555",
+    "os": "#000000",
+    "path": "#1478DB",
+    "white": "#ffffff"
+  },
+  "upgrade": {
+    "source": "cdn",
+    "interval": "168h",
+    "auto": false,
+    "notice": false
   },
   "blocks": [
     {
@@ -16,100 +20,115 @@
       "alignment": "left",
       "segments": [
         {
-
-          "foreground": "p:white",
-          "background":"#333333",
-          "trailing_diamond": "\ue0b0",
-          "style": "diamond",
-          "template": " {{ .Icon }} ",
-          "type": "os"
-        },
-     
-        {
-          "background": "p:path",
-          "foreground": "#ffffff",
-          "leading_diamond": "<transparent,p:path>\ue0b0</>",
           "properties": {
+            "cache_duration": "none"
+          },
+          "trailing_diamond": "\ue0b0",
+          "template": " {{ .Icon }} ",
+          "foreground": "p:white",
+          "background": "#333333",
+          "type": "os",
+          "style": "diamond"
+        },
+        {
+          "properties": {
+            "cache_duration": "none",
             "style": "full"
           },
-          "style": "diamond",
-          "template": " {{ .Path }} ",
+          "leading_diamond": "<transparent,p:path>\ue0b0</>",
           "trailing_diamond": "\ue0b0",
-          "type": "path"
+          "template": " {{ .Path }} ",
+          "foreground": "#ffffff",
+          "background": "p:path",
+          "type": "path",
+          "style": "diamond"
         },
         {
-          "type": "python",
-          "background": "p:path",
+          "properties": {
+            "cache_duration": "none",
+            "fetch_version": false
+          },
+          "template": "({{ if .Error }}{{ .Error }}{{ else }}{{ if .Venv }}{{ .Venv }} {{ end }}{{ .Full }}{{ end }})",
           "foreground": "#ffffff",
           "powerline_symbol": "\ue0b0",
-          "style": "powerline",
-          "template": "({{ if .Error }}{{ .Error }}{{ else }}{{ if .Venv }}{{ .Venv }} {{ end }}{{ .Full }}{{ end }})",
-          "properties": {
-            "fetch_version": false
-          }
+          "background": "p:path",
+          "type": "python",
+          "style": "powerline"
         },
         {
+          "properties": {
+            "cache_duration": "none",
+            "fetch_stash_count": true,
+            "fetch_status": true
+          },
+          "template": " {{ .HEAD }}{{ if .Staging.Changed }}<#FF6F00> \uf046 {{ .Staging.String }}</>{{ end }}{{ if and (.Working.Changed) (.Staging.Changed) }} |{{ end }}{{ if .Working.Changed }} \uf044 {{ .Working.String }}{{ end }}{{ if gt .StashCount 0 }} \ueb4b {{ .StashCount }}{{ end }} ",
+          "foreground": "#000000",
+          "powerline_symbol": "\ue0b0",
           "background": "#00C853",
+          "type": "git",
+          "style": "powerline",
           "background_templates": [
             "{{ if or (.Working.Changed) (.Staging.Changed) }}#FFEB3B{{ end }}",
             "{{ if and (gt .Ahead 0) (gt .Behind 0) }}#FFCC80{{ end }}",
             "{{ if gt .Ahead 0 }}#B388FF{{ end }}",
             "{{ if gt .Behind 0 }}#B388FF{{ end }}"
-          ],
-          "foreground": "#000000",
-          "powerline_symbol": "\ue0b0",
-          "properties": {
-            "fetch_stash_count": true,
-            "fetch_status": true
-          },
-          "style": "powerline",
-          "template": " {{ .HEAD }}{{ if .Staging.Changed }}<#FF6F00> \uf046 {{ .Staging.String }}</>{{ end }}{{ if and (.Working.Changed) (.Staging.Changed) }} |{{ end }}{{ if .Working.Changed }} \uf044 {{ .Working.String }}{{ end }}{{ if gt .StashCount 0 }} \ueb4b {{ .StashCount }}{{ end }} ",
-          "type": "git"
+          ]
         },
         {
+          "properties": {
+            "cache_duration": "none"
+          },
+          "foreground": "lightRed",
           "type": "root",
-          "style": "plain",
-          "foreground": "lightRed"
+          "style": "plain"
         }
-
       ]
     },
-        {
+    {
       "type": "rprompt",
       "segments": [
         {
+          "properties": {
+            "cache_duration": "none"
+          },
+          "template": " {{ .CurrentDate | date .Format }} ",
+          "foreground": "#000000",
+          "background": "p:clock",
           "type": "time",
-          "background":"p:clock",
-          "foreground" : "#000000",
-          "style": "plain",
-          "template": " {{ .CurrentDate | date .Format }} "
-        },
-                {
-          "foreground": "p:darkGray",
-          "style": "diamond",
-          "template": " \ue266 {{ round .PhysicalPercentUsed .Precision }}% ",
-          "type": "sysinfo"
+          "style": "plain"
         },
         {
-          "type": "battery",
-          "style": "diamond",
-           "trailing_diamond": "\ue0b4",
-           "leading_diamond": "\ue0b6",
+          "properties": {
+            "cache_duration": "none"
+          },
+          "template": " \ue266 {{ round .PhysicalPercentUsed .Precision }}% ",
+          "foreground": "p:darkGray",
+          "type": "sysinfo",
+          "style": "diamond"
+        },
+        {
+          "properties": {
+            "cache_duration": "none",
+            "charged_icon": "\ue22f ",
+            "charging_icon": "\ue234 ",
+            "discharging_icon": "\ue231 "
+          },
+          "leading_diamond": "\ue0b6",
+          "trailing_diamond": "\ue0b4",
+          "template": "{{ if not .Error }}{{ .Icon }}{{ .Percentage }}{{ end }}%",
           "foreground": "#193549",
           "background": "#ffeb3b",
+          "type": "battery",
+          "style": "diamond",
           "background_templates": [
             "{{if eq \"Charging\" .State.String}}#40c4ff{{end}}",
             "{{if eq \"Discharging\" .State.String}}#ff5722{{end}}",
             "{{if eq \"Full\" .State.String}}#4caf50{{end}}"
-          ],
-          "template": "{{ if not .Error }}{{ .Icon }}{{ .Percentage }}{{ end }}%",
-          "properties": {
-            "discharging_icon": " ",
-            "charging_icon": " ",
-            "charged_icon": " "
-          }
+          ]
         }
       ]
     }
-  ]
+  ],
+  "version": 3,
+  "final_space": true
 }
