@@ -1,0 +1,101 @@
+"$schema" = "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json"
+version = 3
+final_space = true
+
+[[blocks]]
+type = "prompt"
+alignment = "left"
+
+  [[blocks.segments]]
+  type = "os"
+  style = "diamond"
+  foreground= "p:white"
+  background_templates = [
+    "{{if gt .Code 0}}lightRed{{end}}",
+    "{{if eq .Code 0}}#333333{{end}}"
+  ]  
+  template = " {{ .Icon }} "
+  trailing_diamond = ""
+
+  [[blocks.segments]]
+  type = "path"
+  style = "diamond"
+  foreground = "#ffffff"
+  background = "p:path"
+  template = " {{ .Path }} "
+  leading_diamond = "<transparent,p:path></>"
+  trailing_diamond = ""
+
+    [blocks.segments.options]
+    style = "full"
+
+  [[blocks.segments]]
+  type = "python"
+  style = "powerline"
+  foreground = "#ffffff"
+  background = "p:path"
+  template = "({{ if .Error }}{{ .Error }}{{ else }}{{ if .Venv }}{{ .Venv }} {{ end }}{{ .Full }}{{ end }})"
+  powerline_symbol = ""
+
+    [blocks.segments.options]
+    fetch_version = false
+
+  [[blocks.segments]]
+  type = "git"
+  style = "powerline"
+  foreground = "#000000"
+  background = "#00C853"
+  background_templates = [
+  "{{ if or (.Working.Changed) (.Staging.Changed) }}#FFEB3B{{ end }}",
+  "{{ if and (gt .Ahead 0) (gt .Behind 0) }}#FFCC80{{ end }}",
+  "{{ if gt .Ahead 0 }}#B388FF{{ end }}",
+  "{{ if gt .Behind 0 }}#B388FF{{ end }}"
+]
+
+  template = " {{ .HEAD }}{{ if .Staging.Changed }}<#FF6F00>  {{ .Staging.String }}</>{{ end }}{{ if and (.Working.Changed) (.Staging.Changed) }} |{{ end }}{{ if .Working.Changed }}  {{ .Working.String }}{{ end }}{{ if gt .StashCount 0 }}  {{ .StashCount }}{{ end }} "
+  powerline_symbol = ""
+
+    [blocks.segments.options]
+    fetch_stash_count = true
+    fetch_status = true
+
+  [[blocks.segments]]
+  type = "root"
+  style = "plain"
+  foreground = "lightRed"
+
+[[blocks]]
+type = "rprompt"
+
+  [[blocks.segments]]
+  type = "sysinfo"
+  style = "diamond"
+  foreground = "p:darkGray"
+  template = "  {{ round .PhysicalPercentUsed .Precision }}% "
+
+  [[blocks.segments]]
+  type = "battery"
+  style = "diamond"
+  foreground = "#193549"
+  background = "#ffeb3b"
+  background_templates = [
+  "{{if eq \"Charging\" .State.String}}#40c4ff{{end}}",
+  "{{if eq \"Discharging\" .State.String}}#ff5722{{end}}",
+  "{{if eq \"Full\" .State.String}}#4caf50{{end}}"
+]
+  template = "{{ if not .Error }}{{ .Icon }}{{ .Percentage }}{{ end }}%"
+  leading_diamond = ""
+  trailing_diamond = ""
+
+    [blocks.segments.options]
+    charged_icon = " "
+    charging_icon = " "
+    discharging_icon = " "
+
+[palette]
+battery = "#ffeb3b"
+clock = "#333333"
+darkGray = "#555555"
+os = "#000000"
+path = "#1478DB"
+white = "#ffffff"
